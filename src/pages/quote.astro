@@ -1,0 +1,125 @@
+---
+import BaseLayout from '../components/layout/BaseLayout.astro';
+import QuoteForm from '../components/forms/QuoteForm';
+---
+
+<BaseLayout
+  title="Get a Free Quote"
+  description="Request a free hydroseeding quote from Smart Seed Australia. Fill in your project details and we'll respond within 1 business day. Servicing NSW, ACT, VIC and all of Australia."
+  breadcrumbs={[
+    { name: 'Home', url: 'https://smartseedaustralia.com/' },
+    { name: 'Get a Quote', url: 'https://smartseedaustralia.com/quote/' },
+  ]}
+>
+  <section class="quote-page-hero section--dark">
+    <div class="container quote-hero-inner">
+      <span class="text-eyebrow" style="color: var(--color-teal-300);">Free & No Obligation</span>
+      <h1 style="color:#fff; font-size: var(--text-4xl);">Get a Free Quote</h1>
+      <p style="color: var(--color-green-200); max-width: 50ch; font-size: var(--text-lg);">Fill in your project details below and we'll get back to you within 1 business day with a tailored quote.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container quote-grid">
+      <!-- Side benefits -->
+      <aside class="quote-benefits">
+        <h2>Why Choose Smart Seed?</h2>
+
+        <ul class="quote-benefit-list" role="list">
+          {[
+            { icon: '⚡', title: 'Fast Turnaround', body: 'We respond to all quote requests within 1 business day, and can often get to site within a week.' },
+            { icon: '💰', title: '50–80% Cheaper Than Turf', body: 'For most areas over 200m², hydroseeding is significantly more cost-effective than instant turf.' },
+            { icon: '📋', title: 'Custom Seed Mixes', body: 'Every mix is designed for your specific climate zone, soil type, end use, and any environmental conditions.' },
+            { icon: '🔒', title: 'No Hidden Costs', body: 'Our quotes are detailed and transparent. No surprises — just honest pricing for quality work.' },
+            { icon: '🌱', title: 'Established Results', body: '500+ projects completed across residential, commercial, and mine rehabilitation. We know what works.' },
+          ].map(b => (
+            <li class="quote-benefit-item">
+              <span class="quote-benefit-icon" aria-hidden="true">{b.icon}</span>
+              <div>
+                <strong class="quote-benefit-title">{b.title}</strong>
+                <p class="quote-benefit-body">{b.body}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </aside>
+
+      <!-- Form -->
+      <div class="quote-form-wrap">
+        <QuoteForm client:visible />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .quote-page-hero {
+    padding-block: var(--space-section-sm);
+  }
+
+  .quote-hero-inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .quote-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+  }
+
+  .quote-benefits h2 {
+    font-size: var(--text-2xl);
+    color: var(--color-green-900);
+    margin-bottom: var(--space-8);
+  }
+
+  .quote-benefit-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .quote-benefit-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+
+  .quote-benefit-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .quote-benefit-title {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-green-900);
+    margin-bottom: var(--space-1);
+  }
+
+  .quote-benefit-body {
+    font-size: var(--text-sm);
+    color: var(--color-earth-600);
+    line-height: var(--leading-normal);
+    max-width: 100%;
+  }
+
+  .quote-form-wrap {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
+    box-shadow: var(--shadow-lg);
+  }
+
+  @media (min-width: 900px) {
+    .quote-grid {
+      grid-template-columns: 1fr 1.6fr;
+      align-items: start;
+    }
+  }
+</style>

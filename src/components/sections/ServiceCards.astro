@@ -1,0 +1,265 @@
+---
+const services = [
+  {
+    icon: '🌱',
+    title: 'Hydroseeding',
+    slug: 'hydroseeding',
+    description: 'A hydraulic seeding method that combines seed, fertiliser, mulch and water into a slurry — applied in a single pass for fast, even germination.',
+    features: ['Faster germination', 'Uniform coverage', 'Cost-effective for large areas'],
+    image: 'https://images.unsplash.com/photo-1585320806297-9794b3e4aaae?w=600&q=80&auto=format&fit=crop',
+    highlight: true,
+  },
+  {
+    icon: '🌿',
+    title: 'Hydromulching',
+    slug: 'hydromulching',
+    description: 'Protective mulch slurry applied over existing seed or revegetation areas to lock in moisture, suppress weeds and prevent erosion.',
+    features: ['Erosion control', 'Moisture retention', 'Weed suppression'],
+    image: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&q=80&auto=format&fit=crop',
+    highlight: false,
+  },
+  {
+    icon: '💧',
+    title: 'Watering Services',
+    slug: 'watering',
+    description: 'Professional post-application watering programs to support germination and establishment — ensuring your investment reaches full potential.',
+    features: ['Scheduled watering', 'Establishment support', 'Drought management'],
+    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80&auto=format&fit=crop',
+    highlight: false,
+  },
+  {
+    icon: '🏗️',
+    title: 'Commercial Projects',
+    slug: 'commercial',
+    description: 'Large-scale hydroseeding for developers, councils, road corridors, sporting fields, and infrastructure projects. Compliant with environmental conditions.',
+    features: ['Any scale', 'Compliance reporting', 'Project management'],
+    image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80&auto=format&fit=crop',
+    highlight: false,
+  },
+  {
+    icon: '⛏️',
+    title: 'Mine Rehabilitation',
+    slug: 'mine-rehabilitation',
+    description: 'Specialist revegetation for mine sites, tailings dams, and disturbed land. We meet regulatory standards and create resilient, self-sustaining ecosystems.',
+    features: ['Native species', 'Regulatory compliance', 'Long-term establishment'],
+    image: 'https://images.unsplash.com/photo-1574623452334-1e0ac2b3ccb4?w=600&q=80&auto=format&fit=crop',
+    highlight: false,
+  },
+  {
+    icon: '🏡',
+    title: 'Residential',
+    slug: 'residential',
+    description: 'Affordable lawn establishment for new homes, extensions, renovations, and landscaping projects. Beautiful results without the turf price tag.',
+    features: ['New lawn establishment', 'Lawn repair', 'Sloped areas'],
+    image: 'https://images.unsplash.com/photo-1558904541-efa843a96f01?w=600&q=80&auto=format&fit=crop',
+    highlight: false,
+  },
+];
+---
+
+<section class="section services-section" aria-labelledby="services-heading">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="text-eyebrow">What We Do</span>
+      <h2 id="services-heading">Services Built for Australia's Landscape</h2>
+      <hr class="divider divider--center" />
+      <p class="text-lead">From residential lawns to major mine rehabilitation — we have the equipment, expertise and local knowledge to grow results.</p>
+    </div>
+
+    <!-- Bento grid layout -->
+    <div class="services-bento reveal-stagger">
+      {services.map((service, i) => (
+        <article
+          class:list={['service-card', { 'service-card--featured': service.highlight }]}
+          style={`--card-index: ${i}`}
+        >
+          <div class="service-card-img-wrap">
+            <img
+              src={service.image}
+              alt={`${service.title} — Smart Seed Australia`}
+              width="600"
+              height="400"
+              loading="lazy"
+              class="service-card-img"
+            />
+            <div class="service-card-img-overlay" aria-hidden="true"></div>
+          </div>
+          <div class="service-card-body">
+            <span class="service-card-icon" aria-hidden="true">{service.icon}</span>
+            <h3 class="service-card-title">{service.title}</h3>
+            <p class="service-card-desc">{service.description}</p>
+            <ul class="service-card-features" role="list">
+              {service.features.map(f => (
+                <li>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                  {f}
+                </li>
+              ))}
+            </ul>
+            <a href={`/services/${service.slug}/`} class="service-card-link arrow-link" aria-label={`Learn more about ${service.title}`}>
+              Learn more
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <div style="text-align:center; margin-top: var(--space-12);">
+      <a href="/services/" class="btn btn--primary btn--lg">View All Services</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .services-section { background: var(--color-bg); }
+
+  /* Bento grid */
+  .services-bento {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  /* Card */
+  .service-card {
+    position: relative;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    background: var(--color-surface);
+    box-shadow: var(--shadow-md);
+    display: flex;
+    flex-direction: column;
+    transition: transform var(--duration-normal) var(--ease-out-expo), box-shadow var(--duration-normal);
+  }
+
+  .service-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl), var(--shadow-green);
+  }
+
+  /* Image */
+  .service-card-img-wrap {
+    position: relative;
+    height: 180px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .service-card--featured .service-card-img-wrap { height: 240px; }
+
+  .service-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-out-expo);
+  }
+
+  .service-card:hover .service-card-img { transform: scale(1.05); }
+
+  .service-card-img-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 40%, oklch(18% 0.07 148 / 0.5));
+  }
+
+  /* Body */
+  .service-card-body {
+    padding: var(--space-6);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .service-card-icon {
+    font-size: 1.75rem;
+    margin-bottom: var(--space-3);
+    display: block;
+    line-height: 1;
+  }
+
+  .service-card-title {
+    font-size: var(--text-2xl);
+    color: var(--color-green-900);
+    margin-bottom: var(--space-3);
+  }
+
+  .service-card-desc {
+    font-size: var(--text-sm);
+    color: var(--color-earth-600);
+    line-height: var(--leading-normal);
+    margin-bottom: var(--space-4);
+    flex: 1;
+  }
+
+  .service-card-features {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-bottom: var(--space-5);
+  }
+
+  .service-card-features li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-earth-700);
+  }
+
+  .service-card-features svg { color: var(--color-teal-500); flex-shrink: 0; }
+
+  .service-card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-green-700);
+    text-decoration: none;
+    margin-top: auto;
+    transition: gap var(--duration-fast), color var(--duration-fast);
+  }
+
+  .service-card-link:hover {
+    color: var(--color-green-800);
+    gap: var(--space-3);
+  }
+
+  /* Featured card */
+  .service-card--featured {
+    background: var(--color-green-900);
+    color: #fff;
+  }
+
+  .service-card--featured .service-card-title { color: #fff; }
+  .service-card--featured .service-card-desc { color: var(--color-green-200); }
+  .service-card--featured .service-card-features li { color: var(--color-green-100); }
+  .service-card--featured .service-card-features svg { color: var(--color-teal-300); }
+  .service-card--featured .service-card-link { color: var(--color-teal-300); }
+  .service-card--featured .service-card-link:hover { color: #fff; }
+
+  /* Responsive grid */
+  @media (min-width: 640px) {
+    .services-bento {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .service-card--featured {
+      grid-column: 1 / -1;
+    }
+    .service-card--featured .service-card-img-wrap { height: 280px; }
+  }
+
+  @media (min-width: 1024px) {
+    .services-bento {
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto auto;
+    }
+    .service-card--featured {
+      grid-column: 1 / 2;
+      grid-row: 1 / 3;
+    }
+    .service-card--featured .service-card-img-wrap { height: 260px; }
+  }
+</style>

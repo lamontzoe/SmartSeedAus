@@ -1,0 +1,89 @@
+---
+import { SITE_NAME, SITE_URL, SITE_PHONE, SITE_EMAIL } from '../../lib/seo';
+
+interface Props {
+  type?: 'LocalBusiness' | 'Service' | 'FAQPage' | 'WebPage';
+  name?: string;
+  description?: string;
+  image?: string;
+  url?: string;
+  faqItems?: Array<{ question: string; answer: string }>;
+  serviceType?: string;
+  areaServed?: string[];
+  breadcrumbs?: Array<{ name: string; url: string }>;
+}
+
+const {
+  type = 'LocalBusiness',
+  name = SITE_NAME,
+  description,
+  image = `${SITE_URL}/images/og-default.jpg`,
+  url = SITE_URL,
+  faqItems,
+  serviceType,
+  areaServed,
+  breadcrumbs,
+} = Astro.props;
+
+const localBusinessSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  '@id': `${SITE_URL}/#business`,
+  name: SITE_NAME,
+  url: SITE_URL,
+  telephone: SITE_PHONE,
+  email: SITE_EMAIL,
+  image: `${SITE_URL}/images/logo.png`,
+  logo: `${SITE_URL}/images/logo.png`,
+  description: 'Smart Seed Australia provides professional hydroseeding, hydromulching, and watering services for residential, commercial, and mine rehabilitation projects across NSW, ACT, VIC and all of Australia.',
+  priceRange: '$$',
+  currenciesAccepted: 'AUD',
+  paymentAccepted: 'Cash, Credit Card, Invoice',
+  areaServed: [
+    { '@type': 'State', name: 'New South Wales' },
+    { '@type': 'State', name: 'Australian Capital Territory' },
+    { '@type': 'State', name: 'Victoria' },
+    { '@type': 'Country', name: 'Australia' },
+  ],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Hydroseeding Services',
+    itemListElement: [
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Hydroseeding', serviceType: 'Hydroseeding' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Hydromulching', serviceType: 'Hydromulching' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Commercial Hydroseeding', serviceType: 'Commercial Hydroseeding' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Mine Rehabilitation', serviceType: 'Mine Site Rehabilitation' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Erosion Control', serviceType: 'Erosion Control' } },
+    ],
+  },
+  sameAs: [],
+};
+
+const faqSchema = faqItems ? {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map(item => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+} : null;
+
+const breadcrumbSchema = breadcrumbs ? {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: breadcrumbs.map((crumb, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: crumb.name,
+    item: crumb.url,
+  })),
+} : null;
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(localBusinessSchema)} />
+{faqSchema && <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />}
+{breadcrumbSchema && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />}

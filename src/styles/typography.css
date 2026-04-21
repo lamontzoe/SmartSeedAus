@@ -1,0 +1,80 @@
+/* Typography — DM Serif Display + DM Sans via Google Fonts */
+
+/* Self-hosted via Google Fonts preconnect */
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  font-weight: 400;
+  line-height: var(--leading-normal);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  color: var(--color-earth-900);
+  line-height: var(--leading-tight);
+}
+
+h1 { font-size: var(--text-hero); }
+h2 { font-size: var(--text-4xl); }
+h3 { font-size: var(--text-3xl); }
+h4 { font-size: var(--text-2xl); }
+h5 { font-size: var(--text-xl); }
+h6 { font-size: var(--text-lg); }
+
+p {
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--color-earth-700);
+  max-width: 68ch;
+}
+
+p + p {
+  margin-top: var(--space-4);
+}
+
+strong { font-weight: 600; }
+em     { font-style: italic; font-family: var(--font-display); }
+
+.text-display {
+  font-family: var(--font-display);
+  font-size: var(--text-hero);
+  line-height: var(--leading-tight);
+}
+
+.text-eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-teal-500);
+}
+
+.text-lead {
+  font-size: var(--text-lg);
+  line-height: var(--leading-snug);
+  color: var(--color-earth-700);
+  max-width: 55ch;
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.text-inv {
+  color: var(--color-text-inv);
+}
+
+.text-inv p,
+.text-inv h1,
+.text-inv h2,
+.text-inv h3,
+.text-inv h4 {
+  color: inherit;
+}

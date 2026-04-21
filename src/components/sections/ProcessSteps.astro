@@ -1,0 +1,231 @@
+---
+const steps = [
+  {
+    num: '01',
+    title: 'Site Assessment',
+    description: 'Our team visits your site to assess soil conditions, slope, drainage, and surrounding environment. We recommend the right seed mix and application method for your specific needs and local climate.',
+    icon: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>`,
+  },
+  {
+    num: '02',
+    title: 'Seed Mix Preparation',
+    description: 'We prepare a custom slurry blending premium Australian seed varieties, organic fertiliser, tackifier, and hydromulch — all calibrated to your soil type, climate zone, and end use.',
+    icon: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 8v4l3 3"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4Z"/></svg>`,
+  },
+  {
+    num: '03',
+    title: 'Hydraulic Application',
+    description: 'Our specialised hydroseeding trucks apply the slurry uniformly across your site in a single efficient pass — reaching slopes, embankments, and areas conventional seeding cannot.',
+    icon: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a10 10 0 1 0 0-20"/><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/></svg>`,
+  },
+  {
+    num: '04',
+    title: 'Germination & Grow',
+    description: 'Within 5–14 days, you\'ll see green shoots emerging. Our optional follow-up watering program ensures optimal moisture during the critical establishment phase.',
+    icon: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 1 1.1 7.5c-1.7-.1-3.2-.5-4.2-1.5-.9-1-1.4-2.5-1.4-5 2.7-.5 3.9.4 4.5-.9V6z"/></svg>`,
+  },
+];
+---
+
+<section class="section section--alt process-section" aria-labelledby="process-heading">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="text-eyebrow">How It Works</span>
+      <h2 id="process-heading">From Bare Ground to Green — Fast</h2>
+      <hr class="divider divider--center" />
+      <p class="text-lead">Our proven process delivers consistent results across every terrain and project type.</p>
+    </div>
+
+    <div class="process-grid reveal-stagger">
+      {steps.map((step, i) => (
+        <div class="process-step" style={`--step-index: ${i}`}>
+          <div class="process-connector" aria-hidden="true">
+            <div class="process-line"></div>
+          </div>
+          <div class="process-num-wrap" aria-hidden="true">
+            <span class="process-num">{step.num}</span>
+          </div>
+          <div class="process-icon" aria-hidden="true" set:html={step.icon} />
+          <h3 class="process-title">{step.title}</h3>
+          <p class="process-desc">{step.description}</p>
+        </div>
+      ))}
+    </div>
+
+    <!-- Timeline image strip -->
+    <div class="process-image-strip reveal" aria-label="Hydroseeding process: before and after">
+      <div class="process-strip-item">
+        <img
+          src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=400&q=80&auto=format&fit=crop"
+          alt="Bare soil before hydroseeding"
+          width="400"
+          height="260"
+          loading="lazy"
+        />
+        <span class="process-strip-label">Day 0 — Bare Ground</span>
+      </div>
+      <div class="process-strip-arrow" aria-hidden="true">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </div>
+      <div class="process-strip-item">
+        <img
+          src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&q=80&auto=format&fit=crop"
+          alt="Seedlings emerging after hydroseeding"
+          width="400"
+          height="260"
+          loading="lazy"
+        />
+        <span class="process-strip-label">Day 7–14 — First Shoots</span>
+      </div>
+      <div class="process-strip-arrow" aria-hidden="true">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </div>
+      <div class="process-strip-item">
+        <img
+          src="https://images.unsplash.com/photo-1558904541-efa843a96f01?w=400&q=80&auto=format&fit=crop"
+          alt="Lush lawn established after hydroseeding"
+          width="400"
+          height="260"
+          loading="lazy"
+        />
+        <span class="process-strip-label">Week 6–8 — Full Cover</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .process-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+    position: relative;
+    margin-bottom: var(--space-16);
+  }
+
+  .process-step {
+    position: relative;
+    padding-left: var(--space-16);
+    padding-top: var(--space-2);
+  }
+
+  /* Connector line */
+  .process-connector {
+    position: absolute;
+    left: 1.5rem;
+    top: 3.5rem;
+    bottom: -2rem;
+    width: 2px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .process-step:last-child .process-connector { display: none; }
+
+  .process-line {
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--color-teal-300), transparent);
+  }
+
+  /* Step number */
+  .process-num-wrap {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--radius-full);
+    background: var(--color-green-700);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .process-num {
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    color: #fff;
+    font-weight: 400;
+  }
+
+  .process-icon {
+    color: var(--color-teal-500);
+    margin-bottom: var(--space-3);
+    display: block;
+  }
+
+  .process-title {
+    font-size: var(--text-2xl);
+    color: var(--color-green-900);
+    margin-bottom: var(--space-3);
+  }
+
+  .process-desc {
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--color-earth-600);
+    max-width: 52ch;
+  }
+
+  /* Image strip */
+  .process-image-strip {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    overflow-x: auto;
+    padding-bottom: var(--space-4);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-green-300) transparent;
+  }
+
+  .process-strip-item {
+    flex-shrink: 0;
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    flex: 1;
+    min-width: 220px;
+  }
+
+  .process-strip-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .process-strip-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: var(--space-2) var(--space-4);
+    background: linear-gradient(to top, oklch(18% 0.07 148 / 0.85), transparent);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: #fff;
+    text-align: center;
+  }
+
+  .process-strip-arrow {
+    color: var(--color-teal-500);
+    flex-shrink: 0;
+  }
+
+  /* Responsive */
+  @media (min-width: 768px) {
+    .process-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-10) var(--space-12);
+    }
+
+    .process-connector { display: none; }
+  }
+
+  @media (min-width: 1024px) {
+    .process-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

@@ -1,0 +1,364 @@
+/* ============================================
+   Scroll & Interaction Animations
+   Smart Seed Australia
+   Uses only transform + opacity (no layout thrashing)
+   Respects prefers-reduced-motion throughout
+   ============================================ */
+
+/* === SCROLL REVEAL BASE === */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.6s var(--ease-out-expo),
+    transform 0.6s var(--ease-out-expo);
+  will-change: opacity, transform;
+}
+
+.reveal.reveal--up    { transform: translateY(28px); }
+.reveal.reveal--left  { transform: translateX(-28px); }
+.reveal.reveal--right { transform: translateX(28px); }
+.reveal.reveal--scale { transform: scale(0.94); }
+.reveal.reveal--fade  { transform: none; }
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Stagger delays for grid children */
+.reveal-stagger > *:nth-child(1)  { transition-delay: 0ms; }
+.reveal-stagger > *:nth-child(2)  { transition-delay: 60ms; }
+.reveal-stagger > *:nth-child(3)  { transition-delay: 120ms; }
+.reveal-stagger > *:nth-child(4)  { transition-delay: 180ms; }
+.reveal-stagger > *:nth-child(5)  { transition-delay: 240ms; }
+.reveal-stagger > *:nth-child(6)  { transition-delay: 300ms; }
+.reveal-stagger > *:nth-child(7)  { transition-delay: 360ms; }
+.reveal-stagger > *:nth-child(8)  { transition-delay: 420ms; }
+.reveal-stagger > *:nth-child(9)  { transition-delay: 480ms; }
+.reveal-stagger > *:nth-child(10) { transition-delay: 540ms; }
+.reveal-stagger > *:nth-child(11) { transition-delay: 600ms; }
+.reveal-stagger > *:nth-child(12) { transition-delay: 660ms; }
+
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.5s var(--ease-out-expo),
+    transform 0.5s var(--ease-out-expo);
+  will-change: opacity, transform;
+}
+
+.reveal-stagger.is-visible > * {
+  opacity: 1;
+  transform: none;
+}
+
+/* === CARD HOVER MICRO-INTERACTIONS === */
+
+.card-hover {
+  transition:
+    transform var(--duration-normal) var(--ease-out-expo),
+    box-shadow var(--duration-normal) var(--ease-out-expo);
+  cursor: pointer;
+}
+
+.card-hover:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow:
+    0 20px 40px -8px oklch(18% 0.07 148 / 0.18),
+    0 8px 16px -4px oklch(18% 0.07 148 / 0.10);
+}
+
+.card-hover:active {
+  transform: translateY(-2px) scale(0.99);
+  transition-duration: 100ms;
+}
+
+/* Image zoom on card hover */
+.card-hover .card-img,
+.card-hover img {
+  transition: transform var(--duration-slow) var(--ease-out-expo);
+  will-change: transform;
+}
+
+.card-hover:hover .card-img,
+.card-hover:hover img {
+  transform: scale(1.07);
+}
+
+/* === BUTTON MICRO-INTERACTIONS === */
+
+:global(.btn) {
+  position: relative;
+  overflow: hidden;
+  transition:
+    background var(--duration-fast),
+    transform 200ms var(--ease-spring),
+    box-shadow 200ms var(--ease-out-expo) !important;
+}
+
+/* Ripple effect */
+:global(.btn)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,0.25) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity var(--duration-fast);
+  pointer-events: none;
+}
+
+:global(.btn):hover::after { opacity: 1; }
+
+:global(.btn):active {
+  transform: translateY(1px) scale(0.98) !important;
+}
+
+/* === NAV LINK UNDERLINE SLIDE === */
+
+.nav-link-animated {
+  position: relative;
+}
+
+.nav-link-animated::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  right: 50%;
+  height: 2px;
+  background: var(--color-teal-500);
+  border-radius: var(--radius-full);
+  transition: left var(--duration-normal) var(--ease-out-expo), right var(--duration-normal) var(--ease-out-expo);
+}
+
+.nav-link-animated:hover::after,
+.nav-link-animated.active::after {
+  left: 0;
+  right: 0;
+}
+
+/* === COUNTER ANIMATION === */
+
+.counter-value {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+  transition: transform var(--duration-fast);
+}
+
+.counter-value.pulse {
+  animation: counterPulse 0.3s var(--ease-spring);
+}
+
+@keyframes counterPulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+/* === PARALLAX HERO === */
+
+.parallax-hero-img {
+  will-change: transform;
+  transition: none; /* JS handles this */
+}
+
+/* === SECTION TRANSITIONS - gradient fades between sections === */
+
+.section-fade-top::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 80px;
+  background: linear-gradient(to bottom, var(--color-bg), transparent);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* === SCROLL PROGRESS BAR === */
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(to right, var(--color-teal-500), var(--color-green-500));
+  transform-origin: left;
+  transform: scaleX(0);
+  z-index: 9999;
+  transition: transform 0.1s linear;
+  border-radius: 0 var(--radius-full) var(--radius-full) 0;
+}
+
+/* === IMAGE HOVER SHINE === */
+
+.img-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.img-shine::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -75%;
+  width: 50%;
+  height: 200%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.15),
+    transparent
+  );
+  transform: skewX(-20deg);
+  opacity: 0;
+  transition: opacity var(--duration-fast);
+  pointer-events: none;
+}
+
+.img-shine:hover::after {
+  opacity: 1;
+  animation: shine 0.6s var(--ease-out-expo);
+}
+
+@keyframes shine {
+  from { left: -75%; }
+  to   { left: 125%; }
+}
+
+/* === FLOATING LABEL / BADGE PULSE === */
+
+@keyframes badgePulse {
+  0%, 100% { box-shadow: 0 0 0 0 oklch(56% 0.12 195 / 0.4); }
+  50%       { box-shadow: 0 0 0 8px oklch(56% 0.12 195 / 0); }
+}
+
+.badge-pulse {
+  animation: badgePulse 2.5s ease-in-out infinite;
+}
+
+/* === LINK ARROW SLIDE === */
+
+.arrow-link svg {
+  transition: transform var(--duration-fast) var(--ease-out-expo);
+}
+
+.arrow-link:hover svg {
+  transform: translateX(4px);
+}
+
+/* === STAT REVEAL NUMBER === */
+
+@keyframes statReveal {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.92);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
+.stat-reveal {
+  animation: statReveal 0.5s var(--ease-out-expo) both;
+}
+
+/* === HERO TEXT STAGGER === */
+
+@keyframes heroWord {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
+/* === TESTIMONIAL CARD HOVER === */
+
+.testimonial-hover {
+  transition:
+    transform var(--duration-normal) var(--ease-out-expo),
+    border-color var(--duration-normal),
+    box-shadow var(--duration-normal);
+}
+
+.testimonial-hover:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: var(--color-teal-500) !important;
+  box-shadow: 0 16px 40px -8px oklch(18% 0.07 148 / 0.3);
+}
+
+/* === PHONE BUTTON RING PULSE === */
+
+@keyframes ringPulse {
+  0%   { transform: scale(1); box-shadow: 0 0 0 0 oklch(40% 0.13 148 / 0.5); }
+  70%  { transform: scale(1.05); box-shadow: 0 0 0 12px oklch(40% 0.13 148 / 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 oklch(40% 0.13 148 / 0); }
+}
+
+.phone-pulse {
+  animation: ringPulse 2.5s ease-out infinite;
+}
+
+/* === VIEW TRANSITIONS === */
+
+@keyframes slideInFromRight {
+  from { transform: translateX(20px); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+
+@keyframes slideOutToLeft {
+  from { transform: none; opacity: 1; }
+  to   { transform: translateX(-20px); opacity: 0; }
+}
+
+::view-transition-old(root) {
+  animation: 250ms ease-in slideOutToLeft both;
+}
+
+::view-transition-new(root) {
+  animation: 350ms var(--ease-out-expo) slideInFromRight both;
+}
+
+/* === REDUCED MOTION OVERRIDES === */
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-stagger > *,
+  .card-hover,
+  .img-shine::after,
+  .parallax-hero-img,
+  .testimonial-hover {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+
+  .reveal-stagger > * {
+    opacity: 1;
+    transform: none;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+
+  .badge-pulse,
+  .phone-pulse,
+  .counter-value.pulse {
+    animation: none !important;
+  }
+}

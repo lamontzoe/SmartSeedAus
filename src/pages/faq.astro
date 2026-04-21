@@ -1,0 +1,204 @@
+---
+import BaseLayout from '../components/layout/BaseLayout.astro';
+import CtaBanner from '../components/sections/CtaBanner.astro';
+
+const faqs = [
+  {
+    q: 'What is hydroseeding?',
+    a: 'Hydroseeding (also called hydraulic mulch seeding) is a planting process that uses a slurry of seed, fertiliser, mulch fibre, and water — mixed in a large tank and sprayed onto prepared soil using a high-pressure hose. It\'s faster, more uniform, and often more cost-effective than hand seeding for areas larger than around 200 square metres.',
+  },
+  {
+    q: 'How quickly does hydroseeded grass germinate?',
+    a: 'Most grass species germinate within 5–14 days under the right moisture and temperature conditions. Cool-season grasses like ryegrass can show shoots within 5–7 days. Warm-season grasses like couch may take 10–21 days. Full coverage is typically achieved within 6–10 weeks.',
+  },
+  {
+    q: 'What\'s the difference between hydroseeding and hydromulching?',
+    a: 'Hydroseeding applies a slurry that includes seed — it\'s the seeding method itself. Hydromulching applies a mulch slurry (without seed, or over pre-existing seed) for erosion protection, moisture retention, and weed suppression. We often use both in sequence for the best results on erosion-prone or difficult sites.',
+  },
+  {
+    q: 'How does the cost compare to turf (instant lawn)?',
+    a: 'Hydroseeding typically costs 50–80% less than instant turf for equivalent areas. The trade-off is time — turf is instant, whereas hydroseeded lawn takes 6–10 weeks to establish. For anything over 150–200m², hydroseeding is almost always the more cost-effective choice.',
+  },
+  {
+    q: 'Can hydroseeding be done on steep slopes?',
+    a: 'Yes — it\'s one of the key advantages of hydroseeding. The hydraulic application method allows even coverage on slopes and embankments where laying turf is impractical or impossible. The hydromulch in the slurry also helps to bind the seed and protect against rain erosion during germination.',
+  },
+  {
+    q: 'What preparation does my site need before hydroseeding?',
+    a: 'Ideally, the soil should be loosened (ripped or tilled) to a depth of 50–100mm, and any rocks, debris, or existing weeds removed. Grading should be complete before we arrive. For large or complex sites, we can advise on site preparation requirements during our initial assessment.',
+  },
+  {
+    q: 'Do I need to water after hydroseeding?',
+    a: 'Yes — consistent moisture is critical during the germination phase (first 3–4 weeks). We recommend light, frequent watering (2–3 times per day for the first 2–3 weeks, then transitioning to deeper, less frequent watering as the lawn establishes). We also offer professional watering services if you\'d prefer us to manage this.',
+  },
+  {
+    q: 'What seed mixes do you use?',
+    a: 'We create custom seed mixes for each project based on your climate zone, end use, soil type, and any environmental or regulatory requirements. Common options include: couch or buffalo for warm climates, fescue/ryegrass mixes for cool climates, native grass blends for erosion control and rehabilitation, and specialised mixes for high-traffic or sporting applications.',
+  },
+  {
+    q: 'Can you do mine rehabilitation to environmental compliance standards?',
+    a: 'Yes — mine site revegetation is one of our specialisations. We work with your environmental team and regulators to design seed mixes that meet the project\'s Environmental Impact Statement (EIS) conditions. We can provide germination reports, establishment monitoring, and compliance documentation.',
+  },
+  {
+    q: 'Do you service all of Australia?',
+    a: 'Our primary service area is NSW, ACT, and VIC. We also travel for larger commercial and mine rehabilitation projects nationally. Contact us to discuss your project location and we\'ll advise on availability.',
+  },
+  {
+    q: 'How do I get a quote?',
+    a: 'You can request a free quote using our online form, or call us directly. For larger or complex projects, we recommend a site visit. We typically respond to all enquiries within 1 business day.',
+  },
+  {
+    q: 'What is the minimum area you\'ll hydroseeed?',
+    a: 'We generally work on areas from around 150m² upward for residential projects. For smaller areas, we\'ll advise honestly on whether hydroseeding is the most cost-effective option, or whether hand seeding might be more appropriate.',
+  },
+];
+---
+
+<BaseLayout
+  title="Frequently Asked Questions"
+  description="Answers to common questions about hydroseeding, hydromulching, lawn establishment, mine rehabilitation, and our services across NSW, ACT, VIC and Australia."
+  faqItems={faqs.map(f => ({ question: f.q, answer: f.a }))}
+  breadcrumbs={[
+    { name: 'Home', url: 'https://smartseedaustralia.com/' },
+    { name: 'FAQ', url: 'https://smartseedaustralia.com/faq/' },
+  ]}
+>
+  <!-- Page hero -->
+  <section class="page-hero" aria-labelledby="faq-heading">
+    <div class="page-hero-bg" aria-hidden="true">
+      <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1440&q=85&auto=format&fit=crop" alt="" width="1440" height="400" loading="eager" fetchpriority="high" />
+      <div class="page-hero-overlay"></div>
+    </div>
+    <div class="container page-hero-inner">
+      <span class="text-eyebrow" style="color: var(--color-teal-300);">Questions Answered</span>
+      <h1 id="faq-heading" style="color:#fff;">Frequently Asked Questions</h1>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container container--narrow">
+      <dl class="faq-list">
+        {faqs.map((faq, i) => (
+          <div class="faq-item">
+            <dt>
+              <button
+                class="faq-question"
+                aria-expanded="false"
+                aria-controls={`faq-answer-${i}`}
+                id={`faq-question-${i}`}
+              >
+                {faq.q}
+                <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="6 9 12 15 18 9"/>
+                </svg>
+              </button>
+            </dt>
+            <dd
+              class="faq-answer"
+              id={`faq-answer-${i}`}
+              role="region"
+              aria-labelledby={`faq-question-${i}`}
+              hidden
+            >
+              <p>{faq.a}</p>
+            </dd>
+          </div>
+        ))}
+      </dl>
+
+      <div class="faq-still-have" style="margin-top: var(--space-12); text-align:center;">
+        <p class="text-lead" style="margin-inline:auto;">Still have questions?</p>
+        <div style="display:flex; gap: var(--space-4); justify-content:center; flex-wrap:wrap; margin-top: var(--space-6);">
+          <a href="/contact/" class="btn btn--primary">Contact Us</a>
+          <a href="/quote/" class="btn btn--quote">Get a Free Quote</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CtaBanner />
+</BaseLayout>
+
+<style>
+  .page-hero {
+    position: relative;
+    min-height: 280px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+  .page-hero-bg { position: absolute; inset: 0; }
+  .page-hero-bg img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+  .page-hero-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, oklch(18% 0.07 148 / 0.88), oklch(24% 0.09 148 / 0.72)); }
+  .page-hero-inner { position: relative; z-index: 1; padding-block: clamp(3rem, 6vh, 5rem); display: flex; flex-direction: column; gap: var(--space-4); }
+
+  /* FAQ */
+  .faq-list { display: flex; flex-direction: column; gap: var(--space-3); }
+
+  .faq-item {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: border-color var(--duration-fast), box-shadow var(--duration-fast);
+  }
+
+  .faq-item:has(.faq-question[aria-expanded="true"]) {
+    border-color: var(--color-teal-300);
+    box-shadow: var(--shadow-md);
+  }
+
+  .faq-question {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-6);
+    text-align: left;
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--color-green-900);
+    background: var(--color-surface);
+    cursor: pointer;
+    border: none;
+    transition: background var(--duration-fast);
+  }
+
+  .faq-question:hover { background: var(--color-green-50); }
+
+  .faq-icon {
+    flex-shrink: 0;
+    color: var(--color-teal-500);
+    transition: transform var(--duration-normal) var(--ease-out-expo);
+  }
+
+  .faq-question[aria-expanded="true"] .faq-icon {
+    transform: rotate(180deg);
+  }
+
+  .faq-answer {
+    padding: 0 var(--space-6) var(--space-6);
+    background: var(--color-surface);
+  }
+
+  .faq-answer p {
+    font-size: var(--text-sm);
+    line-height: var(--leading-loose);
+    color: var(--color-earth-700);
+  }
+</style>
+
+<script>
+  const questions = document.querySelectorAll<HTMLButtonElement>('.faq-question');
+
+  questions.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      const answerId = btn.getAttribute('aria-controls')!;
+      const answer = document.getElementById(answerId) as HTMLElement;
+
+      btn.setAttribute('aria-expanded', String(!expanded));
+      answer.hidden = expanded;
+    });
+  });
+</script>

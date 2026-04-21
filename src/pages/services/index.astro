@@ -1,0 +1,208 @@
+---
+import BaseLayout from '../../components/layout/BaseLayout.astro';
+import CtaBanner from '../../components/sections/CtaBanner.astro';
+
+const services = [
+  {
+    slug: 'hydroseeding',
+    title: 'Hydroseeding',
+    eyebrow: 'Most Popular',
+    description: 'A hydraulic seeding method that combines seed, fertiliser, mulch and water into a uniform slurry — applied across large areas in a single, efficient pass. Ideal for residential lawns, sports fields, and large open areas.',
+    benefits: ['Faster germination than dry seeding', 'Even, consistent coverage', 'Cost-effective for areas over 200m²', 'Works on steep slopes and embankments', 'Custom seed mixes for any climate zone'],
+    image: 'https://images.unsplash.com/photo-1585320806297-9794b3e4aaae?w=800&q=80&auto=format&fit=crop',
+  },
+  {
+    slug: 'hydromulching',
+    title: 'Hydromulching',
+    eyebrow: 'Erosion Protection',
+    description: 'A protective mulch slurry applied over prepared or newly seeded areas to lock in moisture, regulate soil temperature, prevent surface erosion and suppress weed competition during the establishment phase.',
+    benefits: ['Reduces erosion on exposed slopes', 'Maintains soil moisture levels', 'Suppresses weed competition', 'Biodegradable and environmentally safe', 'Can be applied over existing seed'],
+    image: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80&auto=format&fit=crop',
+  },
+  {
+    slug: 'watering',
+    title: 'Watering Services',
+    eyebrow: 'Establishment Support',
+    description: 'Professional post-application watering programs using purpose-built water carts and scheduling — ensuring your seed investment gets the consistent moisture it needs to germinate and establish fully.',
+    benefits: ['Scheduled watering programs', 'Purpose-built water cart fleet', 'Remote and hard-to-access sites', 'Establishment monitoring', 'Drought period management'],
+    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80&auto=format&fit=crop',
+  },
+  {
+    slug: 'commercial',
+    title: 'Commercial Projects',
+    eyebrow: 'Large Scale',
+    description: 'Large-scale hydroseeding for property developers, local councils, road and rail corridor rehabilitation, airports, sporting facilities, and infrastructure projects across Australia.',
+    benefits: ['Any project scale', 'Environmental compliance documentation', 'Coordination with construction schedules', 'Council and regulatory reporting', 'Native species and approved seed mixes'],
+    image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80&auto=format&fit=crop',
+  },
+  {
+    slug: 'mine-rehabilitation',
+    title: 'Mine Rehabilitation',
+    eyebrow: 'Environmental Recovery',
+    description: 'Specialist revegetation programs for mine sites, tailings dams, waste rock dumps, and large-scale disturbed land. We work with your environmental team to meet regulatory conditions and establish self-sustaining native ecosystems.',
+    benefits: ['Certified native species mixes', 'Regulatory compliance reporting', 'Tailings dam and disturbed land specialist', 'Ongoing establishment monitoring', 'Long-term revegetation programs'],
+    image: 'https://images.unsplash.com/photo-1574623452334-1e0ac2b3ccb4?w=800&q=80&auto=format&fit=crop',
+  },
+  {
+    slug: 'residential',
+    title: 'Residential Lawns',
+    eyebrow: 'Home & Garden',
+    description: 'Affordable, professional lawn establishment for new homes, extensions, landscaping projects, and lawn repairs. Achieve a lush, healthy lawn without the high cost of instant turf.',
+    benefits: ['New home lawn establishment', 'Lawn repair and renovation', 'Steep blocks and difficult terrain', 'Custom lawn seed mixes', 'No turf-laying disruption'],
+    image: 'https://images.unsplash.com/photo-1558904541-efa843a96f01?w=800&q=80&auto=format&fit=crop',
+  },
+];
+---
+
+<BaseLayout
+  title="Services"
+  description="Smart Seed Australia offers professional hydroseeding, hydromulching, and watering services for residential, commercial, and mine rehabilitation projects across NSW, ACT, VIC and all of Australia."
+  breadcrumbs={[
+    { name: 'Home', url: 'https://smartseedaustralia.com/' },
+    { name: 'Services', url: 'https://smartseedaustralia.com/services/' },
+  ]}
+>
+  <!-- Page hero -->
+  <section class="page-hero" aria-labelledby="services-page-heading">
+    <div class="page-hero-bg" aria-hidden="true">
+      <img src="https://images.unsplash.com/photo-1590212151175-e58edd96185b?w=1440&q=85&auto=format&fit=crop" alt="" width="1440" height="400" loading="eager" fetchpriority="high" />
+      <div class="page-hero-overlay"></div>
+    </div>
+    <div class="container page-hero-inner">
+      <span class="text-eyebrow" style="color: var(--color-teal-300);">What We Offer</span>
+      <h1 id="services-page-heading" style="color:#fff;">Our Services</h1>
+      <p style="color: var(--color-green-100); max-width: 52ch; font-size: var(--text-lg);">Professional hydroseeding, hydromulching, and watering solutions — tailored to every site, scale, and purpose.</p>
+    </div>
+  </section>
+
+  <!-- Services list -->
+  <section class="section services-list">
+    <div class="container">
+      {services.map((service, i) => (
+        <article class:list={['service-item', { 'service-item--reverse': i % 2 !== 0 }]} id={service.slug}>
+          <div class="service-item-img-wrap">
+            <img
+              src={service.image}
+              alt={`${service.title} — Smart Seed Australia`}
+              width="800"
+              height="500"
+              loading="lazy"
+              class="service-item-img"
+            />
+            <span class="service-item-eyebrow">{service.eyebrow}</span>
+          </div>
+          <div class="service-item-body">
+            <h2 class="service-item-title">{service.title}</h2>
+            <hr class="divider" />
+            <p class="service-item-desc">{service.description}</p>
+            <ul class="service-item-benefits" role="list">
+              {service.benefits.map(b => (
+                <li>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                  {b}
+                </li>
+              ))}
+            </ul>
+            <div class="service-item-actions">
+              <a href="/quote/" class="btn btn--quote">Get a Quote</a>
+              <a href={`/services/${service.slug}/`} class="btn btn--outline">Learn More</a>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <CtaBanner />
+</BaseLayout>
+
+<style>
+  /* Page hero */
+  .page-hero {
+    position: relative;
+    min-height: 320px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    color: #fff;
+  }
+  .page-hero-bg { position: absolute; inset: 0; }
+  .page-hero-bg img { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; }
+  .page-hero-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, oklch(18% 0.07 148 / 0.88), oklch(24% 0.09 148 / 0.72)); }
+  .page-hero-inner { position: relative; z-index: 1; padding-block: clamp(3rem, 6vh, 6rem); display: flex; flex-direction: column; gap: var(--space-4); }
+
+  /* Services list */
+  .services-list { background: var(--color-bg); }
+
+  .service-item {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+    padding-block: var(--space-12);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .service-item:last-child { border-bottom: none; }
+
+  .service-item-img-wrap {
+    position: relative;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    height: 300px;
+  }
+
+  .service-item-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-out-expo);
+  }
+
+  .service-item:hover .service-item-img { transform: scale(1.03); }
+
+  .service-item-eyebrow {
+    position: absolute;
+    top: var(--space-4);
+    left: var(--space-4);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    background: var(--color-teal-500);
+    color: #fff;
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .service-item-body { display: flex; flex-direction: column; justify-content: center; }
+
+  .service-item-title { font-size: var(--text-4xl); color: var(--color-green-900); margin-bottom: var(--space-2); }
+  .service-item-desc { color: var(--color-earth-700); line-height: var(--leading-normal); margin-bottom: var(--space-6); }
+
+  .service-item-benefits {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-bottom: var(--space-8);
+  }
+  .service-item-benefits li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-earth-700);
+  }
+  .service-item-benefits svg { color: var(--color-teal-500); flex-shrink: 0; }
+
+  .service-item-actions { display: flex; gap: var(--space-4); flex-wrap: wrap; }
+
+  @media (min-width: 768px) {
+    .service-item {
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+    }
+    .service-item--reverse .service-item-img-wrap { order: 2; }
+    .service-item--reverse .service-item-body { order: 1; }
+    .service-item-img-wrap { height: 380px; }
+  }
+</style>
