@@ -1,0 +1,77 @@
+---
+const items = [
+  'Hydroseeding',
+  'Hydromulching',
+  'Watering',
+  'Mine Rehabilitation',
+  'Erosion Control',
+  'Residential Lawns',
+  'Commercial Sites',
+  'Native Revegetation',
+  'Land Restoration',
+  'ACT · NSW · VIC',
+];
+
+// Duplicate for seamless loop
+const allItems = [...items, ...items];
+---
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    {allItems.map(item => (
+      <span class="marquee-item">{item}</span>
+    ))}
+  </div>
+</div>
+
+<style>
+  .marquee {
+    overflow: hidden;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    padding-block: var(--space-4);
+    background: var(--color-bg);
+  }
+
+  .marquee-track {
+    display: flex;
+    gap: 0;
+    width: max-content;
+    animation: marquee 45s linear infinite;
+  }
+
+  .marquee-track:hover {
+    animation-play-state: paused;
+  }
+
+  .marquee-item {
+    flex-shrink: 0;
+    padding-inline: var(--space-8);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-earth-600);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    position: relative;
+  }
+
+  .marquee-item::before {
+    content: '❋';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-teal-500);
+    font-size: 0.75rem;
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track { animation: none; }
+  }
+</style>

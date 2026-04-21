@@ -1,0 +1,208 @@
+---
+const faqs = [
+  {
+    q: 'What is hydroseeding?',
+    a: 'A hydraulic seeding process that combines seed, fertiliser, mulch fibre and water into a slurry — sprayed onto prepared soil in a single pass for fast, uniform germination at a fraction of the cost of instant turf.',
+  },
+  {
+    q: 'How quickly does hydroseeded grass germinate?',
+    a: 'Most species show shoots within 5–14 days. Ryegrass can emerge in 5–7 days; warm-season grasses like couch take 10–21 days. Full cover typically arrives in 6–10 weeks.',
+  },
+  {
+    q: "What's the difference between hydroseeding and hydromulching?",
+    a: "Hydroseeding includes seed in the slurry — it's the seeding method. Hydromulching applies a mulch-only slurry over existing seed or bare soil for erosion protection, moisture retention, and weed suppression.",
+  },
+  {
+    q: 'Can hydroseeding be done on steep slopes?',
+    a: "Yes — it's one of the main advantages. The hydraulic application reaches slopes and embankments where turf laying is impractical. The mulch component also binds to the soil and protects seed during rain events.",
+  },
+  {
+    q: 'Do you handle mine rehabilitation to compliance standards?',
+    a: 'Yes. Mine site revegetation is a specialism. We design native seed mixes to meet your EIS conditions, and can supply germination reports, establishment monitoring and compliance documentation.',
+  },
+  {
+    q: 'How do I get a quote?',
+    a: 'Fill in the contact form above or call 0491 021 536. For larger or complex projects we recommend a site visit. We respond to all enquiries within one business day.',
+  },
+];
+---
+
+<section class="faq-section" id="faq" aria-labelledby="faq-heading">
+  <div class="container faq-grid">
+    <!-- Left: title col -->
+    <div class="faq-title-col">
+      <div class="section-label-wrap">
+        <span class="section-label">FAQ · 06</span>
+      </div>
+      <h2 id="faq-heading" class="faq-title">
+        Common <em>questions.</em>
+      </h2>
+      <p class="faq-more">
+        More questions? <a href="/faq/">See the full FAQ →</a>
+      </p>
+    </div>
+
+    <!-- Right: accordion -->
+    <div class="faq-list">
+      {faqs.map((item, i) => (
+        <div class="faq-item" data-faq-index={i}>
+          <button
+            class="faq-question"
+            aria-expanded="false"
+            aria-controls={`faq-answer-${i}`}
+            id={`faq-btn-${i}`}
+          >
+            <span>{item.q}</span>
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div
+            class="faq-answer"
+            id={`faq-answer-${i}`}
+            aria-labelledby={`faq-btn-${i}`}
+            aria-hidden="true"
+            role="region"
+          >
+            <p>{item.a}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq-section {
+    padding-block: var(--space-section);
+    background: var(--color-bg);
+  }
+
+  .faq-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+  }
+
+  @media (min-width: 768px) {
+    .faq-grid {
+      grid-template-columns: 280px 1fr;
+      align-items: start;
+    }
+  }
+
+  .faq-title-col {
+    position: sticky;
+    top: 7rem;
+  }
+
+  .faq-title {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    color: var(--color-green-900);
+    margin-bottom: var(--space-6);
+  }
+
+  .faq-title em {
+    font-style: italic;
+    color: var(--color-teal-700);
+  }
+
+  .faq-more {
+    font-size: var(--text-sm);
+    color: var(--color-earth-500);
+  }
+
+  .faq-more a {
+    color: var(--color-green-700);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .faq-more a:hover { text-decoration: underline; }
+
+  /* Accordion */
+  .faq-list {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    width: 100%;
+    padding-block: var(--space-5);
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--color-green-900);
+    font-family: var(--font-body);
+    transition: color var(--duration-fast);
+  }
+
+  .faq-question:hover { color: var(--color-green-700); }
+
+  .faq-icon {
+    font-size: 1.25rem;
+    line-height: 1;
+    color: var(--color-green-700);
+    flex-shrink: 0;
+    transition: transform var(--duration-normal) var(--ease-out-expo);
+  }
+
+  .faq-item.open .faq-icon {
+    transform: rotate(45deg);
+  }
+
+  .faq-answer {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height var(--duration-slow) var(--ease-out-expo), opacity var(--duration-normal), padding var(--duration-normal);
+  }
+
+  .faq-item.open .faq-answer {
+    max-height: 400px;
+    opacity: 1;
+    padding-bottom: var(--space-5);
+  }
+
+  .faq-answer p {
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--color-earth-700);
+    margin: 0;
+  }
+</style>
+
+<script>
+  const items = document.querySelectorAll('.faq-item');
+
+  items.forEach(item => {
+    const btn = item.querySelector('.faq-question') as HTMLButtonElement;
+    const answer = item.querySelector('.faq-answer') as HTMLElement;
+
+    btn.addEventListener('click', () => {
+      const isOpen = item.classList.contains('open');
+
+      // Close all
+      items.forEach(it => {
+        it.classList.remove('open');
+        (it.querySelector('.faq-question') as HTMLElement)?.setAttribute('aria-expanded', 'false');
+        (it.querySelector('.faq-answer') as HTMLElement)?.setAttribute('aria-hidden', 'true');
+      });
+
+      if (!isOpen) {
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+        answer.setAttribute('aria-hidden', 'false');
+      }
+    });
+  });
+</script>

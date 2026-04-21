@@ -43,8 +43,12 @@ const canonicalUrl = canonical ?? buildCanonical(Astro.url.pathname);
     <!-- Critical: Preload hero font weight -->
     <link
       rel="preload"
-      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;600&family=JetBrains+Mono:wght@400;500;600&display=swap"
       as="style"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;600&family=JetBrains+Mono:wght@400;500;600&display=swap"
     />
 
     <title>{pageTitle}</title>
@@ -84,6 +88,9 @@ const canonicalUrl = canonical ?? buildCanonical(Astro.url.pathname);
     <!-- Scroll progress indicator -->
     <div class="scroll-progress" aria-hidden="true"></div>
 
+    <!-- Grain texture overlay -->
+    <div class="grain" aria-hidden="true"></div>
+
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <Header />
     <main id="main-content">
@@ -99,11 +106,14 @@ const canonicalUrl = canonical ?? buildCanonical(Astro.url.pathname);
 
   /* Header scrolled state */
   .site-header {
-    transition: box-shadow var(--duration-normal), background var(--duration-normal);
+    transition: box-shadow var(--duration-normal), background var(--duration-normal), border-color var(--duration-normal);
   }
   .site-header.header--scrolled {
     box-shadow: 0 4px 24px -4px oklch(18% 0.07 148 / 0.12);
-    background: rgba(255, 255, 255, 0.99);
+    background: oklch(97% 0.01 65 / 0.92) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border-bottom-color: var(--color-border) !important;
   }
 </style>
 

@@ -1,11 +1,13 @@
 ---
 import BaseLayout from '../components/layout/BaseLayout.astro';
 import HomeHero from '../components/hero/HomeHero.astro';
+import Marquee from '../components/sections/Marquee.astro';
 import ServiceCards from '../components/sections/ServiceCards.astro';
 import ProcessSteps from '../components/sections/ProcessSteps.astro';
-import Testimonials from '../components/sections/Testimonials.astro';
-import TrustBar from '../components/sections/TrustBar.astro';
-import CtaBanner from '../components/sections/CtaBanner.astro';
+import CoverageMap from '../components/sections/CoverageMap.tsx';
+import BeforeAfter from '../components/sections/BeforeAfter.tsx';
+import FaqSection from '../components/sections/FaqSection.astro';
+import ContactSection from '../components/sections/ContactSection.astro';
 ---
 
 <BaseLayout
@@ -14,9 +16,18 @@ import CtaBanner from '../components/sections/CtaBanner.astro';
   breadcrumbs={[{ name: 'Home', url: 'https://smartseedaustralia.com/' }]}
 >
   <HomeHero />
-  <TrustBar />
+  <Marquee />
   <ServiceCards />
   <ProcessSteps />
-  <Testimonials />
-  <CtaBanner />
+  <CoverageMap client:visible />
+  <BeforeAfter client:visible />
+  <FaqSection />
+  <ContactSection />
 </BaseLayout>
+
+<style>
+  /* Ensure body has the cream background even before sections load */
+  body {
+    background-color: var(--color-bg);
+  }
+</style>

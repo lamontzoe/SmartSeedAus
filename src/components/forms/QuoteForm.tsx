@@ -1,57 +1,102 @@
 import { useState } from 'preact/hooks';
-import { validateName, validateEmail, validatePhone, validateRequired } from '../../lib/validation';
+
+interface FormState {
+  services: string[];
+  state: string;
+  area: string;
+  size: string;
+  message: string;
+  name: string;
+  email: string;
+  phone: string;
+  honeypot: string;
+}
 
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
 
-const services = [
-  'Hydroseeding — Residential',
-  'Hydroseeding — Commercial',
-  'Hydromulching',
-  'Watering Services',
-  'Mine Rehabilitation',
-  'Erosion Control',
-  'Not sure — need advice',
+const SERVICE_OPTIONS = ['Hydroseeding', 'Hydromulching', 'Watering', 'Not sure yet'];
+const STATE_OPTIONS = [
+  { value: 'ACT', label: 'Australian Capital Territory' },
+  { value: 'NSW', label: 'New South Wales' },
+  { value: 'VIC', label: 'Victoria' },
+  { value: 'QLD', label: 'Queensland' },
+  { value: 'SA', label: 'South Australia' },
+  { value: 'WA', label: 'Western Australia' },
+  { value: 'NT', label: 'Northern Territory' },
+  { value: 'TAS', label: 'Tasmania' },
+];
+const AREA_OPTIONS = [
+  'Residential',
+  'Commercial / Builder',
+  'Council / Government',
+  'Mining / Civil',
+  'Landscaper (B2B)',
 ];
 
-const states = ['NSW', 'ACT', 'VIC', 'QLD', 'SA', 'WA', 'NT', 'TAS'];
+const STEP_LABELS = ['Scope', 'Site', 'Contact'];
 
 export default function QuoteForm() {
+  const [step, setStep] = useState(0);
   const [status, setStatus] = useState<FormStatus>('idle');
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<FormState>({
+    services: [],
+    state: '',
+    area: '',
+    size: '',
+    message: '',
     name: '',
     email: '',
     phone: '',
-    suburb: '',
-    state: '',
-    service: '',
-    area: '',
-    timeline: '',
-    message: '',
     honeypot: '',
   });
 
-  function set(field: string, value: string) {
-    setForm(prev => ({ ...prev, [field]: value }));
-    if (errors[field]) setErrors(prev => ({ ...prev, [field]: '' }));
+  function update(k: keyof FormState, v: string) {
+    setForm(prev => ({ ...prev, [k]: v }));
+    if (errors[k]) setErrors(prev => ({ ...prev, [k]: '' }));
   }
 
-  function validate(): boolean {
-    const newErrors: Record<string, string> = {};
-    const n = validateName(form.name); if (!n.valid) newErrors.name = n.error!;
-    const e = validateEmail(form.email); if (!e.valid) newErrors.email = e.error!;
-    const p = validatePhone(form.phone); if (!p.valid) newErrors.phone = p.error!;
-    const s = validateRequired(form.suburb, 'Suburb'); if (!s.valid) newErrors.suburb = s.error!;
-    const st = validateRequired(form.state, 'State'); if (!st.valid) newErrors.state = st.error!;
-    const sv = validateRequired(form.service, 'Service type'); if (!sv.valid) newErrors.service = sv.error!;
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+  function toggleService(s: string) {
+    setForm(prev => ({
+      ...prev,
+      services: prev.services.includes(s)
+        ? prev.services.filter(x => x !== s)
+        : [...prev.services, s],
+    }));
+    if (errors.services) setErrors(prev => ({ ...prev, services: '' }));
   }
 
-  async function handleSubmit(e: Event) {
+  function validateStep(): boolean {
+    const e: Record<string, string> = {};
+    if (step === 0) {
+      if (form.services.length === 0) e.services = 'Pick at least one service';
+      if (!form.state) e.state = 'Select a state';
+    }
+    if (step === 1) {
+      if (!form.size.trim()) e.size = 'Site size is required';
+    }
+    if (step === 2) {
+      if (!form.name.trim()) e.name = 'Name is required';
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = 'Valid email required';
+      if (!/^[\d\s()+-]{8,}$/.test(form.phone)) e.phone = 'Valid phone required';
+    }
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  }
+
+  function next() {
+    if (validateStep()) setStep(s => s + 1);
+  }
+
+  function back() {
+    setStep(s => s - 1);
+    setErrors({});
+  }
+
+  async function submit(e: Event) {
     e.preventDefault();
-    if (form.honeypot) return; // spam guard
-    if (!validate()) return;
+    if (form.honeypot) return;
+    if (!validateStep()) return;
 
     setStatus('submitting');
     try {
@@ -59,21 +104,17 @@ export default function QuoteForm() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
+          services: form.services.join(', '),
+          state: form.state,
+          projectType: form.area,
+          siteSize: form.size,
+          notes: form.message,
           name: form.name,
           email: form.email,
           phone: form.phone,
-          location: `${form.suburb}, ${form.state}`,
-          service: form.service,
-          area: form.area,
-          timeline: form.timeline,
-          message: form.message,
         }),
       });
-      if (res.ok) {
-        setStatus('success');
-      } else {
-        setStatus('error');
-      }
+      setStatus(res.ok ? 'success' : 'error');
     } catch {
       setStatus('error');
     }
@@ -83,18 +124,31 @@ export default function QuoteForm() {
     return (
       <div class="form-success" role="status" aria-live="polite">
         <div class="form-success-icon" aria-hidden="true">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>
+          </svg>
         </div>
-        <h2>Quote Request Received!</h2>
-        <p>Thank you, {form.name.split(' ')[0]}. Our team will review your request and be in touch within 1 business day. For urgent enquiries, please call us directly.</p>
-        <a href="/" class="btn btn--primary" style="margin-top: 1.5rem; display:inline-flex;">Back to Home</a>
+        <h3>Request received.</h3>
+        <p>
+          We've logged your enquiry for <strong>{form.services.join(' · ')}</strong> in <strong>{form.state}</strong>. Expect a call from the crew on <strong>0491 021 536</strong> within 24–48 hours with a scoped estimate.
+        </p>
+        <button
+          class="form-submit"
+          onClick={() => {
+            setStatus('idle');
+            setStep(0);
+            setForm({ services: [], state: '', area: '', size: '', message: '', name: '', email: '', phone: '', honeypot: '' });
+          }}
+        >
+          Submit another →
+        </button>
       </div>
     );
   }
 
   return (
-    <form class="quote-form" onSubmit={handleSubmit} noValidate aria-label="Quote request form">
-      {/* Honeypot — hidden from real users */}
+    <form class="quote-wizard" onSubmit={submit} noValidate aria-label="Quote request form">
+      {/* Honeypot */}
       <input
         type="text"
         name="_gotcha"
@@ -103,175 +157,172 @@ export default function QuoteForm() {
         aria-hidden="true"
         style={{ position: 'absolute', left: '-9999px', opacity: 0, pointerEvents: 'none' }}
         value={form.honeypot}
-        onInput={(e: Event) => set('honeypot', (e.target as HTMLInputElement).value)}
+        onInput={(e: Event) => update('honeypot', (e.target as HTMLInputElement).value)}
       />
 
-      <div class="form-row">
-        <div class="form-group">
-          <label for="qf-name" class="form-label">Full Name <span aria-hidden="true" class="form-required">*</span></label>
-          <input
-            id="qf-name"
-            type="text"
-            class={`form-input ${errors.name ? 'form-input--error' : ''}`}
-            value={form.name}
-            onInput={(e: Event) => set('name', (e.target as HTMLInputElement).value)}
-            autocomplete="name"
-            aria-required="true"
-            aria-describedby={errors.name ? 'qf-name-error' : undefined}
-            placeholder="Jane Smith"
-          />
-          {errors.name && <p id="qf-name-error" class="form-error" role="alert">{errors.name}</p>}
+      {/* Step indicator */}
+      <div class="step-indicator">
+        <div class="step-dots">
+          {[0, 1, 2].map(i => (
+            <div key={i} class={`step-dot${i === step ? ' active' : i < step ? ' done' : ''}`} aria-hidden="true" />
+          ))}
         </div>
-
-        <div class="form-group">
-          <label for="qf-email" class="form-label">Email Address <span aria-hidden="true" class="form-required">*</span></label>
-          <input
-            id="qf-email"
-            type="email"
-            class={`form-input ${errors.email ? 'form-input--error' : ''}`}
-            value={form.email}
-            onInput={(e: Event) => set('email', (e.target as HTMLInputElement).value)}
-            autocomplete="email"
-            aria-required="true"
-            aria-describedby={errors.email ? 'qf-email-error' : undefined}
-            placeholder="jane@example.com"
-          />
-          {errors.email && <p id="qf-email-error" class="form-error" role="alert">{errors.email}</p>}
-        </div>
+        <span class="step-label mono">Step {step + 1} of 3 · {STEP_LABELS[step]}</span>
       </div>
 
-      <div class="form-row">
-        <div class="form-group">
-          <label for="qf-phone" class="form-label">Phone Number <span aria-hidden="true" class="form-required">*</span></label>
-          <input
-            id="qf-phone"
-            type="tel"
-            class={`form-input ${errors.phone ? 'form-input--error' : ''}`}
-            value={form.phone}
-            onInput={(e: Event) => set('phone', (e.target as HTMLInputElement).value)}
-            autocomplete="tel"
-            aria-required="true"
-            aria-describedby={errors.phone ? 'qf-phone-error' : undefined}
-            placeholder="0400 000 000"
-          />
-          {errors.phone && <p id="qf-phone-error" class="form-error" role="alert">{errors.phone}</p>}
-        </div>
+      {/* Step 0: Scope */}
+      {step === 0 && (
+        <div class="step-content">
+          <div class={`form-field${errors.services ? ' field-error' : ''}`}>
+            <label class="form-label">Which services are you interested in?</label>
+            <div class="service-chips">
+              {SERVICE_OPTIONS.map(s => (
+                <button
+                  key={s}
+                  type="button"
+                  class={`service-chip${form.services.includes(s) ? ' active' : ''}`}
+                  onClick={() => toggleService(s)}
+                  aria-pressed={form.services.includes(s)}
+                >
+                  {form.services.includes(s) ? '✓ ' : ''}{s}
+                </button>
+              ))}
+            </div>
+            {errors.services && <div class="error-msg" role="alert">{errors.services}</div>}
+          </div>
 
-        <div class="form-group">
-          <label for="qf-suburb" class="form-label">Suburb / Town <span aria-hidden="true" class="form-required">*</span></label>
-          <input
-            id="qf-suburb"
-            type="text"
-            class={`form-input ${errors.suburb ? 'form-input--error' : ''}`}
-            value={form.suburb}
-            onInput={(e: Event) => set('suburb', (e.target as HTMLInputElement).value)}
-            autocomplete="address-level2"
-            aria-required="true"
-            aria-describedby={errors.suburb ? 'qf-suburb-error' : undefined}
-            placeholder="Canberra"
-          />
-          {errors.suburb && <p id="qf-suburb-error" class="form-error" role="alert">{errors.suburb}</p>}
-        </div>
-      </div>
+          <div class={`form-field${errors.state ? ' field-error' : ''}`}>
+            <label for="qw-state" class="form-label">State</label>
+            <select
+              id="qw-state"
+              value={form.state}
+              onChange={(e: Event) => update('state', (e.target as HTMLSelectElement).value)}
+              aria-required="true"
+            >
+              <option value="">Choose a state…</option>
+              {STATE_OPTIONS.map(s => (
+                <option key={s.value} value={s.value}>{s.label}</option>
+              ))}
+            </select>
+            {errors.state && <div class="error-msg" role="alert">{errors.state}</div>}
+          </div>
 
-      <div class="form-row">
-        <div class="form-group">
-          <label for="qf-state" class="form-label">State <span aria-hidden="true" class="form-required">*</span></label>
-          <select
-            id="qf-state"
-            class={`form-input form-select ${errors.state ? 'form-input--error' : ''}`}
-            value={form.state}
-            onChange={(e: Event) => set('state', (e.target as HTMLSelectElement).value)}
-            aria-required="true"
-            aria-describedby={errors.state ? 'qf-state-error' : undefined}
-          >
-            <option value="">Select state…</option>
-            {states.map(s => <option value={s}>{s}</option>)}
-          </select>
-          {errors.state && <p id="qf-state-error" class="form-error" role="alert">{errors.state}</p>}
-        </div>
+          <div class="form-field">
+            <label for="qw-area" class="form-label">Project type</label>
+            <select
+              id="qw-area"
+              value={form.area}
+              onChange={(e: Event) => update('area', (e.target as HTMLSelectElement).value)}
+            >
+              <option value="">Choose…</option>
+              {AREA_OPTIONS.map(a => <option key={a} value={a}>{a}</option>)}
+            </select>
+          </div>
 
-        <div class="form-group">
-          <label for="qf-service" class="form-label">Service Required <span aria-hidden="true" class="form-required">*</span></label>
-          <select
-            id="qf-service"
-            class={`form-input form-select ${errors.service ? 'form-input--error' : ''}`}
-            value={form.service}
-            onChange={(e: Event) => set('service', (e.target as HTMLSelectElement).value)}
-            aria-required="true"
-            aria-describedby={errors.service ? 'qf-service-error' : undefined}
-          >
-            <option value="">Select service…</option>
-            {services.map(s => <option value={s}>{s}</option>)}
-          </select>
-          {errors.service && <p id="qf-service-error" class="form-error" role="alert">{errors.service}</p>}
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label for="qf-area" class="form-label">Approximate Area (m²)</label>
-          <input
-            id="qf-area"
-            type="text"
-            class="form-input"
-            value={form.area}
-            onInput={(e: Event) => set('area', (e.target as HTMLInputElement).value)}
-            placeholder="e.g. 500"
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="qf-timeline" class="form-label">Preferred Timeline</label>
-          <select
-            id="qf-timeline"
-            class="form-input form-select"
-            value={form.timeline}
-            onChange={(e: Event) => set('timeline', (e.target as HTMLSelectElement).value)}
-          >
-            <option value="">Select timeline…</option>
-            <option>ASAP</option>
-            <option>Within 2 weeks</option>
-            <option>Within a month</option>
-            <option>2–3 months</option>
-            <option>Flexible</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="qf-message" class="form-label">Additional Details</label>
-        <textarea
-          id="qf-message"
-          class="form-input form-textarea"
-          rows={4}
-          value={form.message}
-          onInput={(e: Event) => set('message', (e.target as HTMLTextAreaElement).value)}
-          placeholder="Tell us more about your site, soil conditions, slope, any specific requirements…"
-        />
-      </div>
-
-      {status === 'error' && (
-        <div class="form-alert" role="alert">
-          <p>Something went wrong sending your request. Please try again or call us directly.</p>
+          <div class="form-actions">
+            <button type="button" class="btn-next" onClick={next}>Next →</button>
+          </div>
         </div>
       )}
 
-      <button
-        type="submit"
-        class="btn btn--quote btn--lg form-submit"
-        disabled={status === 'submitting'}
-        aria-busy={status === 'submitting'}
-      >
-        {status === 'submitting' ? (
-          <>
-            <svg class="form-spinner" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg>
-            Sending…
-          </>
-        ) : 'Submit Quote Request'}
-      </button>
+      {/* Step 1: Site */}
+      {step === 1 && (
+        <div class="step-content">
+          <div class={`form-field${errors.size ? ' field-error' : ''}`}>
+            <label for="qw-size" class="form-label">Site size (approx. m² or hectares)</label>
+            <input
+              id="qw-size"
+              type="text"
+              placeholder="e.g. 1,200 m² or 3 ha"
+              value={form.size}
+              onInput={(e: Event) => update('size', (e.target as HTMLInputElement).value)}
+              aria-required="true"
+            />
+            {errors.size && <div class="error-msg" role="alert">{errors.size}</div>}
+          </div>
 
-      <p class="form-note">We respond to all quote requests within 1 business day. Your details are kept private and never shared.</p>
+          <div class="form-field">
+            <label for="qw-message" class="form-label">Tell us about the site (optional)</label>
+            <textarea
+              id="qw-message"
+              rows={3}
+              placeholder="Slope, access, timeline, species preferences…"
+              value={form.message}
+              onInput={(e: Event) => update('message', (e.target as HTMLTextAreaElement).value)}
+            />
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-back" onClick={back}>← Back</button>
+            <button type="button" class="btn-next" onClick={next}>Next →</button>
+          </div>
+        </div>
+      )}
+
+      {/* Step 2: Contact */}
+      {step === 2 && (
+        <div class="step-content">
+          <div class={`form-field${errors.name ? ' field-error' : ''}`}>
+            <label for="qw-name" class="form-label">Your name</label>
+            <input
+              id="qw-name"
+              type="text"
+              placeholder="First and last"
+              value={form.name}
+              onInput={(e: Event) => update('name', (e.target as HTMLInputElement).value)}
+              autocomplete="name"
+              aria-required="true"
+            />
+            {errors.name && <div class="error-msg" role="alert">{errors.name}</div>}
+          </div>
+
+          <div class={`form-field${errors.email ? ' field-error' : ''}`}>
+            <label for="qw-email" class="form-label">Email</label>
+            <input
+              id="qw-email"
+              type="email"
+              placeholder="you@company.com.au"
+              value={form.email}
+              onInput={(e: Event) => update('email', (e.target as HTMLInputElement).value)}
+              autocomplete="email"
+              aria-required="true"
+            />
+            {errors.email && <div class="error-msg" role="alert">{errors.email}</div>}
+          </div>
+
+          <div class={`form-field${errors.phone ? ' field-error' : ''}`}>
+            <label for="qw-phone" class="form-label">Phone</label>
+            <input
+              id="qw-phone"
+              type="tel"
+              placeholder="04xx xxx xxx"
+              value={form.phone}
+              onInput={(e: Event) => update('phone', (e.target as HTMLInputElement).value)}
+              autocomplete="tel"
+              aria-required="true"
+            />
+            {errors.phone && <div class="error-msg" role="alert">{errors.phone}</div>}
+          </div>
+
+          {status === 'error' && (
+            <div class="form-alert" role="alert">
+              Something went wrong. Please try again or call us directly.
+            </div>
+          )}
+
+          <div class="form-actions">
+            <button type="button" class="btn-back" onClick={back}>← Back</button>
+            <button
+              type="submit"
+              class="btn-submit"
+              disabled={status === 'submitting'}
+              aria-busy={status === 'submitting'}
+            >
+              {status === 'submitting' ? 'Sending…' : 'Send request →'}
+            </button>
+          </div>
+        </div>
+      )}
     </form>
   );
 }

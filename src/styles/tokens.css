@@ -40,8 +40,10 @@
   --color-surface:    #ffffff;
   --color-text:       var(--color-earth-900);
   --color-text-muted: var(--color-earth-500);
+  --color-muted:      var(--color-earth-500);
   --color-text-inv:   #ffffff;
   --color-border:     var(--color-earth-200);
+  --color-border-strong: var(--color-earth-300);
   --color-accent:     var(--color-teal-500);
   --color-cta:        var(--color-green-700);
   --color-cta-hover:  var(--color-green-800);
@@ -69,7 +71,8 @@
   /* === TYPOGRAPHY === */
   --font-display: 'DM Serif Display', 'Georgia', serif;
   --font-body:    'DM Sans', 'system-ui', sans-serif;
-  --font-mono:    'ui-monospace', monospace;
+  --font-mono:    'JetBrains Mono', ui-monospace, monospace;
+  --amber:        #e8a020;
 
   --text-xs:   clamp(0.75rem,  0.72rem + 0.15vw, 0.8125rem);
   --text-sm:   clamp(0.875rem, 0.84rem + 0.18vw, 0.9375rem);

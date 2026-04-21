@@ -1,0 +1,138 @@
+---
+import QuoteForm from '../forms/QuoteForm.tsx';
+import { SITE_PHONE, SITE_PHONE_RAW, SITE_EMAIL } from '../../lib/seo';
+---
+
+<section class="contact-section" id="contact" aria-labelledby="contact-heading">
+  <div class="container contact-grid">
+    <!-- Left: headline + info -->
+    <div class="contact-lhs">
+      <div class="section-label-wrap">
+        <span class="section-label">Contact · 07</span>
+      </div>
+      <h2 id="contact-heading" class="contact-title">
+        Tell us about the <em>site.</em>
+      </h2>
+
+      <div class="contact-info">
+        <div class="contact-info-item">
+          <div class="contact-info-key mono">Phone · preferred</div>
+          <div class="contact-info-val">
+            <a href={`tel:${SITE_PHONE_RAW}`}>{SITE_PHONE}</a>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-info-key mono">Email</div>
+          <div class="contact-info-val">
+            <a href={`mailto:${SITE_EMAIL}`}>{SITE_EMAIL}</a>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-info-key mono">Servicing</div>
+          <div class="contact-info-val">ACT · NSW · VIC</div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-info-key mono">Typical next step</div>
+          <div class="contact-info-val contact-info-val--lead">
+            On-site scope → written estimate within 5 working days.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: wizard form -->
+    <div class="contact-rhs">
+      <QuoteForm client:visible />
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact-section {
+    padding-block: var(--space-section);
+    background: var(--color-earth-100);
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+  }
+
+  @media (min-width: 768px) {
+    .contact-grid {
+      grid-template-columns: 1fr 1.4fr;
+      align-items: start;
+    }
+  }
+
+  .contact-lhs {
+    position: sticky;
+    top: 7rem;
+  }
+
+  .contact-title {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    color: var(--color-green-900);
+    margin-bottom: var(--space-10);
+  }
+
+  .contact-title em {
+    font-style: italic;
+    color: var(--color-teal-700);
+  }
+
+  /* Info items */
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .contact-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding-bottom: var(--space-5);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .contact-info-item:last-child { border-bottom: none; }
+
+  .contact-info-key {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-earth-400);
+  }
+
+  .contact-info-val {
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--color-green-900);
+  }
+
+  .contact-info-val a {
+    color: var(--color-green-700);
+    text-decoration: none;
+  }
+
+  .contact-info-val a:hover { text-decoration: underline; }
+
+  .contact-info-val--lead {
+    font-size: var(--text-sm);
+    font-weight: 400;
+    color: var(--color-earth-600);
+    line-height: var(--leading-normal);
+  }
+
+  /* Form shell */
+  .contact-rhs {
+    background: #fff;
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border);
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+  }
+</style>
